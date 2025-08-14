@@ -31,9 +31,9 @@ while True:
             # efetuar depósito
             saldo += valor_deposito
             # adiciona ao extrato a movimentação
-            extrato += f"\n========================================\n(depósito) => ⬆ R$ +{valor_deposito:.2f}"
+            extrato += f"\n========================================\n(depósito)\t⬆ R$ +{valor_deposito:.2f}"
             # mensagem de sucesso:
-            print("""==================================\n\tDepósito efetuado com sucesso!\n==================================""")
+            print("""==================================\nDepósito efetuado com sucesso!\n==================================""")
 
         else:
             # caso a tentativa de depósito seja de valor negativo:
@@ -47,36 +47,42 @@ while True:
 
         valor_saque_positivo = True if valor_saque > 0 else False
         requisito_para_saque_atingido = (contagem_saques < SAQUES_DISPONIVEIS_POR_DIA) and (
-            valor_saque <= saldo)
+            valor_saque <= LIMITE_POR_SAQUE)
         
         if valor_saque_positivo and requisito_para_saque_atingido:
-            # efetua saque
-            saldo -= valor_saque
-            # contabiliza o saque
-            contagem_saques += 1
-            # adiciona ao extrato a movimentação
-            extrato += f"\n========================================\n(saque) => ⬇ R$ -{valor_saque:.2f}"
-            # mensagem de sucesso
-            print("""==================================\n\tSaque efetuado com sucesso!\n==================================""")
+            # efetua saque se valor de saque é menor ou igual que o saldo da conta  
+            if valor_saque <= saldo:
+                saldo -= valor_saque
+                # contabiliza o saque
+                contagem_saques += 1
+                # adiciona ao extrato a movimentação
+                extrato += f"\n========================================\n(saque)\t\t⬇ R$ -{valor_saque:.2f}"
+                # mensagem de sucesso
+                print("""==================================\nSaque efetuado com sucesso!\n==================================""")
+            else:
+                print(f"{"=" * 80}"
+                  f"\n[Ops...] Saldo insuficiente! Valor disponível em conta: {saldo}\n"
+                  f"{"=" * 80}")
         
         # verificação se atingiu a quantidade de saques diários
-        elif valor_saque_positivo and (contagem_saques == SAQUES_DISPONIVEIS_POR_DIA):
+        elif valor_saque_positivo and (contagem_saques == SAQUES_DISPONIVEIS_POR_DIA) and (valor_saque <= LIMITE_POR_SAQUE):
             print(f"{"=" * 80}"
                   f"\n[Ops...] Você já atingiu seu limite de saques diários: {contagem_saques}\n"
                   f"{"=" * 80}")
 
         # verificação se ultrapassa o valor limite de saque por operação
-        elif valor_saque_positivo and (valor_saque > LIMITE_POR_SAQUE):
+        elif valor_saque_positivo and (valor_saque > LIMITE_POR_SAQUE) and (contagem_saques < SAQUES_DISPONIVEIS_POR_DIA):
             print(f"\n{'=' * 80}\n"
-                  f"[Ops...] Seu valor R$ {valor_saque} de saque por operação ultrapassa o limite permitido: {LIMITE_POR_SAQUE:.2f}"
+                  f"[Ops...] Seu valor R$ {valor_saque} de saque ultrapassa o limite permitido por operação: {LIMITE_POR_SAQUE:.2f}"
                   f"\n{'=' * 80}\n")
 
         # caso não atinja nenhum dos dois requisitos para saque 
         else:
-            print(f"\n{'=' * 80}\n"
-                  f"[ERRO] Você não tem os requisitos para essa operação: valor de saque desejado não está dentro do limite [R$ 1.00 a R${LIMITE_POR_SAQUE:.2f} ] e\
-                    quantidade de saques feitos ( {contagem_saques} vezes) menor que [ {SAQUES_DISPONIVEIS_POR_DIA} ]"
-                  f"\n{'=' * 80}\n")
+            print(f"\n{'=' * 100}\n"
+                  f"[ERRO] Você não tem os requisitos para essa operação:\
+                            valor de saque desejado não está dentro do limite [ R$ 1.00 a R${LIMITE_POR_SAQUE:.2f} ] e\
+                            quantidade de saques feitos ( {contagem_saques} vezes ) menor que [ Número de Saques por dia: {SAQUES_DISPONIVEIS_POR_DIA} ]"
+                  f"\n{'=' * 100}\n")
 
     elif opcao == 'e':
         # lógica de impressão de extrato
