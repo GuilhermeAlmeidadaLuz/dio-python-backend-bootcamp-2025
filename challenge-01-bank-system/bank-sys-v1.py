@@ -79,9 +79,7 @@ while True:
         # caso não atinja nenhum dos dois requisitos para saque 
         else:
             print(f"\n{'=' * 100}\n"
-                  f"[ERRO] Você não tem os requisitos para essa operação:\
-                            valor de saque desejado não está dentro do limite [ R$ 1.00 a R${LIMITE_POR_SAQUE:.2f} ] e\
-                            quantidade de saques feitos ( {contagem_saques} vezes ) menor que [ Número de Saques por dia: {SAQUES_DISPONIVEIS_POR_DIA} ]"
+                  f"[ERRO] Você não tem os requisitos para essa operação:\nvalor de saque desejado deve estar dentro do limite [ R$ 1.00 a R${LIMITE_POR_SAQUE:.2f} ] e\nquantidade de saques feitos ( {contagem_saques} vezes ) deve ser menor que [ Número de Saques por dia: {SAQUES_DISPONIVEIS_POR_DIA} ]"
                   f"\n{'=' * 100}\n")
 
     elif opcao == 'e':
